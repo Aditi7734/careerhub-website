@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerHub - Job Portal</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+    }
+    
+    .gradient-header {
+  background-image: url("profile.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+    
+    .job-card {
+      transition: all 0.3s ease;
+    }
+    
+    .job-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .badge-remote {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .badge-featured {
+      background-color: #fef08a;
+      color: #92400e;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gray-50">
+  <div class="h-full flex flex-col w-full overflow-auto"><!-- Header -->
+   <header class="gradient-header text-white py-12 w-full">
+    <div class="max-w-6xl mx-auto px-6">
+     <div class="flex items-center gap-2 mb-8"><i data-lucide="briefcase" style="width: 32px; height: 32px;"></i>
+      <h1 class="text-3xl font-bold">CareerHub</h1>
+     </div>
+     <p class="text-blue-100 text-lg mb-8">Find your next opportunity</p><!-- Search Bar -->
+     <div class="flex gap-4 flex-col sm:flex-row">
+      <div class="flex-1 relative"><i data-lucide="search" style="width: 20px; height: 20px;" class="absolute left-3 top-3 text-gray-400"></i> <input type="text" id="searchInput" placeholder="Job title or keyword..." class="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 placeholder-gray-500">
+      </div>
+      <div class="relative"><i data-lucide="map-pin" style="width: 20px; height: 20px;" class="absolute left-3 top-3 text-gray-400"></i> <select id="locationFilter" class="pl-10 pr-4 py-3 rounded-lg text-gray-900 appearance-none bg-white cursor-pointer" style="padding-right: 32px;"> <option value="">All Locations</option> <option value="Banglore">Banglore</option> <option value="Hyderbad">Hyderbad</option> <option value="Mumbai">Mumbai</option> <option value="Delhi">Delhi</option> <option value="Remote">Remote</option> </select>
+      </div><button id="searchBtn" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-8 py-3 rounded-lg transition-colors flex items-center justify-center gap-2"> <i data-lucide="search" style="width: 20px; height: 20px;"></i> Search </button>
+     </div>
+    </div>
+   </header><!-- Main Content -->
+   <main class="flex-1 max-w-6xl mx-auto w-full px-6 py-8"><!-- Stats Section -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center gap-4">
+       <div class="bg-blue-100 p-3 rounded-lg"><i data-lucide="briefcase" style="width: 24px; height: 24px; color: #1e40af;"></i>
+       </div>
+       <div>
+        <p class="text-gray-600 text-sm">Active Jobs</p>
+        <p class="text-2xl font-bold text-gray-900">1,240</p>
+       </div>
+      </div>
+     </div>
+     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center gap-4">
+       <div class="bg-green-100 p-3 rounded-lg"><i data-lucide="building-2" style="width: 24px; height: 24px; color: #16a34a;"></i>
+       </div>
+       <div>
+        <p class="text-gray-600 text-sm">Companies</p>
+        <p class="text-2xl font-bold text-gray-900">320+</p>
+       </div>
+      </div>
+     </div>
+     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      <div class="flex items-center gap-4">
+       <div class="bg-purple-100 p-3 rounded-lg"><i data-lucide="users" style="width: 24px; height: 24px; color: #a855f7;"></i>
+       </div>
+       <div>
+        <p class="text-gray-600 text-sm">Candidates</p>
+        <p class="text-2xl font-bold text-gray-900">50K+</p>
+       </div>
+      </div>
+     </div>
+    </div><!-- Jobs Listing -->
+    <div class="mb-8">
+     <h2 class="text-2xl font-bold text-gray-900 mb-6">Featured Jobs</h2>
+     <div id="jobsList" class="space-y-4"><!-- Jobs will be populated here -->
+     </div>
+    </div><!-- Load More Button -->
+    <div class="text-center"><button class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg transition-colors"> Load More Jobs </button>
+    </div>
+   </main><!-- Footer -->
+   <footer class="bg-gray-900 text-gray-300 py-12 w-full mt-auto">
+    <div class="max-w-6xl mx-auto px-6">
+     <div class="grid grid-cols-1 sm:grid-cols-4 gap-8 mb-8">
+      <div>
+       <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i data-lucide="briefcase" style="width: 20px; height: 20px;"></i> CareerHub</h3>
+       <p class="text-sm">Your gateway to career opportunities</p>
+      </div>
+      <div>
+       <h4 class="font-bold text-white mb-4">For Job Seekers</h4>
+       <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white transition-colors">Browse Jobs</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">My Applications</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Career Advice</a></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-bold text-white mb-4">For Employers</h4>
+       <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white transition-colors">Post a Job</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Browse Candidates</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-bold text-white mb-4">Connect</h4>
+       <div class="flex gap-4"><a href="#" class="hover:text-white transition-colors"> <i data-lucide="linkedin" style="width: 20px; height: 20px;"></i> </a> <a href="#" class="hover:text-white transition-colors"> <i data-lucide="twitter" style="width: 20px; height: 20px;"></i> </a> <a href="#" class="hover:text-white transition-colors"> <i data-lucide="facebook" style="width: 20px; height: 20px;"></i> </a>
+       </div>
+      </div>
+     </div>
+     <div class="border-t border-gray-800 pt-8 text-center text-sm">
+      <p>© 2024 CareerHub. All rights reserved.</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Sample job data
+    const jobs = [
+{
+id: 1,
+title: "Frontend Developer",
+company: "Infosys",
+location: "Bangalore",
+salary: "₹6 LPA - ₹10 LPA",
+type: "Full-time",
+featured: true,
+remote: false,
+description: "Develop responsive web applications using HTML, CSS, JavaScript and React.",
+posted: "2 days ago"
+},
+
+{
+id: 2,
+title: "Software Engineer",
+company: "TCS",
+location: "Hyderabad",
+salary: "₹5 LPA - ₹9 LPA",
+type: "Full-time",
+featured: false,
+remote: false,
+description: "Work on enterprise applications and backend development.",
+posted: "1 day ago"
+},
+
+{
+id: 3,
+title: "UI/UX Designer",
+company: "Wipro",
+location: "Pune",
+salary: "₹4 LPA - ₹8 LPA",
+type: "Full-time",
+featured: true,
+remote: true,
+description: "Design intuitive interfaces for web and mobile applications.",
+posted: "3 days ago"
+},
+
+{
+id: 4,
+title: "Backend Developer",
+company: "HCL",
+location: "Chennai",
+salary: "₹7 LPA - ₹12 LPA",
+type: "Full-time",
+featured: false,
+remote: true,
+description: "Develop backend APIs using Node.js and databases.",
+posted: "5 days ago"
+},
+
+{
+id: 5,
+title: "Data Analyst",
+company: "Accenture",
+location: "Mumbai",
+salary: "₹6 LPA - ₹11 LPA",
+type: "Full-time",
+featured: false,
+remote: false,
+description: "Analyze datasets and generate business insights using Python and SQL.",
+posted: "4 days ago"
+},
+
+{
+id: 6,
+title: "Software Developer",
+company: "Capgemini",
+location: "Delhi",
+salary: "₹5 LPA - ₹8 LPA",
+type: "Full-time",
+featured: false,
+remote: false,
+description: "Develop scalable applications and participate in software development lifecycle.",
+posted: "1 week ago"
+}
+];
+
+    function renderJobs(jobsToDisplay) {
+      const jobsList = document.getElementById('jobsList');
+      jobsList.innerHTML = jobsToDisplay.map(job => `
+        <div class="job-card bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="text-lg font-bold text-gray-900">${job.title}</h3>
+              <p class="text-gray-600 flex items-center gap-1 mt-1">
+                <i data-lucide="building-2" style="width: 16px; height: 16px;"></i>
+                ${job.company}
+              </p>
+            </div>
+            <div class="flex gap-2">
+              ${job.featured ? '<span class="badge badge-featured">Featured</span>' : ''}
+              ${job.remote ? '<span class="badge badge-remote">Remote</span>' : ''}
+            </div>
+          </div>
+          
+          <p class="text-gray-700 mb-4">${job.description}</p>
+          
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 text-sm">
+            <div>
+              <p class="text-gray-600">Location</p>
+              <p class="font-semibold text-gray-900 flex items-center gap-1">
+                <i data-lucide="map-pin" style="width: 16px; height: 16px;"></i>
+                ${job.location}
+              </p>
+            </div>
+            <div>
+              <p class="text-gray-600">Salary</p>
+              <p class="font-semibold text-gray-900">${job.salary}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Type</p>
+              <p class="font-semibold text-gray-900">${job.type}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Posted</p>
+              <p class="font-semibold text-gray-900">${job.posted}</p>
+            </div>
+          </div>
+          
+          <div class="flex gap-3">
+            <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+              <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+              Apply Now
+            </button>
+            <button class="px-6 py-2 border-2 border-gray-300 hover:border-blue-600 text-gray-900 hover:text-blue-600 font-bold rounded-lg transition-colors">
+              <i data-lucide="heart" style="width: 18px; height: 18px;"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      
+      lucide.createIcons();
+    }
+
+    function filterJobs() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const location = document.getElementById('locationFilter').value;
+      
+      const filtered = jobs.filter(job => {
+        const matchesSearch = job.title.toLowerCase().includes(searchTerm) || 
+                             job.company.toLowerCase().includes(searchTerm);
+        const matchesLocation = !location || job.location === location;
+        return matchesSearch && matchesLocation;
+      });
+      
+      renderJobs(filtered);
+    }
+
+    // Event listeners
+    document.getElementById('searchBtn').addEventListener('click', filterJobs);
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') filterJobs();
+    });
+    document.getElementById('locationFilter').addEventListener('change', filterJobs);
+
+    // Initial render
+    renderJobs(jobs);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc5664b21f325d9',t:'MTc3MzUxMzU1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
